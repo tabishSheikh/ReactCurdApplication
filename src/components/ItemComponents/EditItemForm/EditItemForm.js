@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import './EditItemForm.scss';
 import Button from "../../Button/Button";
 
+
 const ItemUpdateForm = ({ item, onEditItem }) => {
     const [itemCategories, setItemCategories] = useState([]);
     const [selectedCategoryId, updateSelectedCategoryId] = useState('');
@@ -12,6 +13,7 @@ const ItemUpdateForm = ({ item, onEditItem }) => {
     const [itemSKU, setItemSKU] = useState('');
     const [currentItem, setCurrentItem] = useState({});
 
+    // Fetches categories for dropdown selection
     useEffect(() => {
         async function fetchCategories() {
             const res = await fetch('http://localhost:3001/categories');
@@ -22,6 +24,7 @@ const ItemUpdateForm = ({ item, onEditItem }) => {
         fetchCategories();
     }, []);
 
+    // Updates form fields
     useEffect(() => {
         if (item) {
             updateSelectedCategoryId(item.category_id || '');
@@ -33,6 +36,7 @@ const ItemUpdateForm = ({ item, onEditItem }) => {
         }
     }, [item]);
 
+    // Updates currentItem state when any input changes
     useEffect(() => {
         setCurrentItem({
             category_id: selectedCategoryId,
@@ -44,6 +48,7 @@ const ItemUpdateForm = ({ item, onEditItem }) => {
         });
     }, [selectedCategoryId, itemTitle, itemDescription, itemPrice, itemQuantity, itemSKU, item]);
 
+    //update item action
     const handleUpdateItem = () => {
         console.log("ItemUpdateForm handleUpdateItem triggered");
         onEditItem({ ...currentItem, item_id: item.item_id });

@@ -1,46 +1,50 @@
-// ItemsTable.js
 import React from "react";
-import TableRow from "../ItemTableRow/ItemsTableRow.js";
+import ItemRow from "../ItemTableRow/ItemsTableRow.js";
 import './ItemsTable.scss';
 
-const ItemsTable = props => {
-    const editItem = item => {
-        console.log("edit triggered");
-        props.onEditItem(item);
-    }
 
-    const deleteItem = item => {
-        console.log("delete triggered");
-        props.onDeleteItem(item);
-    }
+const ProductTable = ({ items, onEditItem, onDeleteItem }) => {
+    // Function to  edit 
+    const handleEdit = product => {
+        console.log("Editing initiated");
+        onEditItem(product);
+    };
 
-    return(
-        <div className="Table">
+    // Function to  delete 
+    const handleDelete = product => {
+        console.log("Deletion initiated");
+        onDeleteItem(product);
+    };
+
+    return (
+        <div className="ProductTable">
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Category id</th>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>SKU</th>
-                        <th></th>
+                        <th>Index</th>
+                        <th>Category ID</th>
+                        <th>Name</th>
+                        <th>Details</th>
+                        <th>Cost</th>
+                        <th>Stock</th>
+                        <th>Code</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        props.items.map(
-                            (item, index) => (
-                                <TableRow index={ index } item={ item } key={ item.item_id } onEditItem={ editItem } onDeleteItem={ deleteItem } />
-                            )
-                        )
-                    }
+                    {items.map((product, index) => (
+                        <ItemRow 
+                            index={index} 
+                            item={product} 
+                            key={product.item_id} 
+                            onEditItem={handleEdit} 
+                            onDeleteItem={handleDelete} 
+                        />
+                    ))}
                 </tbody>
             </table>
         </div>
     );
 }
 
-export default ItemsTable;
+export default ProductTable;
