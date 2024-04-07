@@ -23,7 +23,7 @@ const ProductTable = ({ items, onEditItem, onDeleteItem }) => {
                     <tr>
                         <th>Index</th>
                         <th>Category ID</th>
-                        <th>Name</th>
+                        <th>title</th>
                         <th>Details</th>
                         <th>Cost</th>
                         <th>Stock</th>

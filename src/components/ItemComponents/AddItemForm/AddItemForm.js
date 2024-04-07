@@ -65,7 +65,7 @@ const ItemCreationForm = ({ onAddItem }) => {
                 ))}
             </select>
             <br />
-            <label>Item Name:</label>
+            <label>Item  title:</label>
             <input type="text" placeholder="Enter item name" value={itemName} onChange={e => setItemName(e.target.value)} />
             <br />
             <label>Item Description:</label>
