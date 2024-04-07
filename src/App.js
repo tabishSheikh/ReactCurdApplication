@@ -12,7 +12,6 @@ import ItemsTable from './components/ItemComponents/ItemTable/ItemsTable';
 //npm install react-router-dom
 //npm install axios
 
-
 // Items Component
 function Items() {
   const [items, setItems] = useState([]);
@@ -142,13 +141,6 @@ function Categories() {
     </div>
   );
 }
-
-// NotFound Component
-// function NotFound() {
-//   return (
-//     <h2>Unable to Locate the Page</h2>
-//   );
-// }
 
 // App Component
 function App() {
