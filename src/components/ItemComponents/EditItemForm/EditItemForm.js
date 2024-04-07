@@ -2,84 +2,83 @@ import React, { useState, useEffect } from "react";
 import './EditItemForm.scss';
 import Button from "../../Button/Button";
 
-const EditItemForm = props => {
-    const [categories, setCategories] = useState([]);
-    const [categoryId, setCategoryId] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [quantity, setQuantity] = useState('');
-    const [sku, setSku] = useState('');
-    const [item, setItem] = useState({});
+const ItemUpdateForm = ({ item, onEditItem }) => {
+    const [itemCategories, setItemCategories] = useState([]);
+    const [selectedCategoryId, updateSelectedCategoryId] = useState('');
+    const [itemTitle, setItemTitle] = useState('');
+    const [itemDescription, setItemDescription] = useState('');
+    const [itemPrice, setItemPrice] = useState('');
+    const [itemQuantity, setItemQuantity] = useState('');
+    const [itemSKU, setItemSKU] = useState('');
+    const [currentItem, setCurrentItem] = useState({});
 
     useEffect(() => {
-        const retrieveCategories = async () => {
-            const response = await fetch('http://localhost:3001/categories');
-            const data = await response.json();
-            setCategories(data.categories);
-        };
+        async function fetchCategories() {
+            const res = await fetch('http://localhost:3001/categories');
+            const { categories } = await res.json();
+            setItemCategories(categories);
+        }
 
-        retrieveCategories();
+        fetchCategories();
     }, []);
 
     useEffect(() => {
-        if (props.item) {
-            setCategoryId(props.item.category_id || '');
-            setTitle(props.item.title || '');
-            setDescription(props.item.description || '');
-            setPrice(props.item.price || '');
-            setQuantity(props.item.quantity || '');
-            setSku(props.item.sku || '');
+        if (item) {
+            updateSelectedCategoryId(item.category_id || '');
+            setItemTitle(item.title || '');
+            setItemDescription(item.description || '');
+            setItemPrice(item.price || '');
+            setItemQuantity(item.quantity || '');
+            setItemSKU(item.sku || '');
         }
-    }, [props.item]);
+    }, [item]);
 
     useEffect(() => {
-        setItem({ 
-            category_id: categoryId, 
-            title, 
-            description, 
-            price, 
-            quantity, 
-            sku 
+        setCurrentItem({
+            category_id: selectedCategoryId,
+            title: itemTitle,
+            description: itemDescription,
+            price: itemPrice,
+            quantity: itemQuantity,
+            sku: itemSKU
         });
-    }, [categoryId, title, description, price, quantity, sku, props.item]);
+    }, [selectedCategoryId, itemTitle, itemDescription, itemPrice, itemQuantity, itemSKU, item]);
 
-    const _editItem = () => {
-        console.log("EditItemForm _editItem triggered");
-        const updatedItem = { ...item, item_id: props.item.item_id };
-        props.onEditItem(updatedItem);
+    const handleUpdateItem = () => {
+        console.log("ItemUpdateForm handleUpdateItem triggered");
+        onEditItem({ ...currentItem, item_id: item.item_id });
     };
 
     return (
-        <div className="Form" style={{ marginTop: '16px' }}>
-            <Button onClick={_editItem} title="Save Item" />
+        <div className="Form" style={{ marginTop: '20px' }}>
+            <Button onClick={handleUpdateItem} title="Update Item Details" />
             <br />
             <label>Category:</label>
-            <select value={categoryId} onChange={e => setCategoryId(e.target.value)}>
-                <option value="">Select a category</option>
-                {categories.map(category => (
-                    <option key={category.category_id} value={category.category_id}>
-                        {category.category_name}
+            <select value={selectedCategoryId} onChange={e => updateSelectedCategoryId(e.target.value)}>
+                <option value="">Choose a category</option>
+                {itemCategories.map(cat => (
+                    <option key={cat.category_id} value={cat.category_id}>
+                        {cat.category_name}
                     </option>
                 ))}
             </select>
             <br />
-            <label>Title:</label>
-            <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
+            <label>Item Title:</label>
+            <input type="text" placeholder="Enter item title" value={itemTitle} onChange={e => setItemTitle(e.target.value)} />
             <br />
-            <label>Description:</label>
-            <input type="text" placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
+            <label>Item Description:</label>
+            <input type="text" placeholder="Describe the item" value={itemDescription} onChange={e => setItemDescription(e.target.value)} />
             <br />
-            <label>Price:</label>
-            <input type="text" placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} />
+            <label>Item Price ($):</label>
+            <input type="text" placeholder="Set price" value={itemPrice} onChange={e => setItemPrice(e.target.value)} />
             <br />
-            <label>Quantity:</label>
-            <input type="text" placeholder="Quantity" value={quantity} onChange={e => setQuantity(e.target.value)} />
+            <label>Item Quantity:</label>
+            <input type="text" placeholder="Available quantity" value={itemQuantity} onChange={e => setItemQuantity(e.target.value)} />
             <br />
-            <label>SKU:</label>
-            <input type="text" placeholder="SKU" value={sku} onChange={e => setSku(e.target.value)} />
+            <label>Item SKU:</label>
+            <input type="text" placeholder="Stock Keeping Unit" value={itemSKU} onChange={e => setItemSKU(e.target.value)} />
         </div>
     );
 }
 
-export default EditItemForm;
+export default ItemUpdateForm;
